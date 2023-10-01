@@ -7,7 +7,7 @@
 		<figure>
 			<section class="img-bg" />
 			<svg
-				class="fill-token -scale-x-[100%]"
+				class="fill-token -scale-x-[100%] variant-ghost" 
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 200 200"
 			>
