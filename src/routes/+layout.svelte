@@ -19,7 +19,7 @@
 			<svelte:fragment slot="trail">
 				<a
 					class="btn btn-sm variant-ghost-surface"
-					href="https://discord.gg/EXqV7W8MtY"
+					href="https://discord.gg/WeZAQEpUvk"
 					target="_blank"
 					rel="noreferrer"
 				>
@@ -27,7 +27,7 @@
 				</a>
 				<a
 					class="btn btn-sm variant-ghost-surface"
-					href="https://twitter.com/SkeletonUI"
+					href="https://twitter.com/SeaBast1en"
 					target="_blank"
 					rel="noreferrer"
 				>
