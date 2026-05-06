@@ -279,8 +279,8 @@
   .stat-label { font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
 
   .scroll-hint {
-    position: absolute; left: 4rem; bottom: 4rem;
-    display: flex; align-items: center; gap: 0.8rem;
+    position: absolute; left: 0; right: 0; bottom: 4rem;
+    display: flex; justify-content: center; align-items: center; gap: 0.8rem;
     font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
     color: var(--muted); opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
   }
@@ -383,7 +383,7 @@
   }
   .project-card:hover {
     border-color: rgba(110,231,183,0.3);
-    transform: translateY(-6px);
+    transform: translateY(-6px) scale(1.02);
     box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 30px rgba(110,231,183,0.08);
   }
   .project-card:hover::before { opacity: 1; }
@@ -453,48 +453,15 @@
   }
   .github-placeholder-icon { font-size: 3rem; display: block; margin-bottom: 1rem; opacity: 0.3; }
 
-  /* UPLOAD PORTFOLIO */
-  #portfolio-upload { padding: 8rem 4rem; }
-  .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
-  .upload-zone {
-    border: 2px dashed var(--border); padding: 4rem 2rem;
-    text-align: center; transition: border-color 0.3s, background 0.3s;
-    cursor: pointer; position: relative; overflow: hidden;
-  }
-  .upload-zone:hover, .upload-zone.drag-over {
-    border-color: var(--accent); background: rgba(110,231,183,0.03);
-  }
-  .upload-icon { font-size: 2.5rem; display: block; margin-bottom: 1rem; opacity: 0.6; }
-  .upload-label { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
-  .upload-hint { color: var(--muted); font-size: 0.78rem; margin-bottom: 1.5rem; }
-  .upload-formats { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
-  .format-badge { font-size: 0.65rem; padding: 0.2rem 0.5rem; border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.05em; }
-  #file-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  .uploaded-files { list-style: none; }
-  .uploaded-file {
-    display: flex; align-items: center; gap: 0.8rem;
-    padding: 0.8rem 1rem; border: 1px solid var(--border);
-    background: var(--surface); margin-bottom: 0.5rem;
-    animation: slideIn 0.3s ease;
-  }
-  @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-  .file-icon { font-size: 1.2rem; }
-  .file-name { flex: 1; font-size: 0.8rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .file-size { font-size: 0.68rem; color: var(--muted); }
-  .file-remove {
-    background: none; border: none; cursor: pointer;
-    color: var(--muted); font-size: 1rem; transition: color 0.2s; cursor: none;
-  }
-  .file-remove:hover { color: var(--accent3); }
-  .upload-section-title {
-    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
-    margin-bottom: 1.5rem; color: var(--text);
-  }
-  .uploaded-count { font-size: 0.72rem; color: var(--accent); margin-left: 0.5rem; }
-  .empty-files { padding: 2rem; border: 1px dashed var(--border); text-align: center; color: var(--muted); font-size: 0.78rem; }
+
 
   /* CONTACT */
-  #contact { padding: 8rem 4rem; background: var(--bg2); }
+  #contact { padding: 8rem 4rem; background: var(--bg); position: relative; overflow: hidden; }
+  #contact-particles {
+    position: absolute; inset: 0; z-index: 0;
+    pointer-events: none; opacity: 0.6;
+  }
+  #contact > *:not(#contact-particles) { position: relative; z-index: 1; }
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; }
   .contact-headline {
     font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3rem);
@@ -673,8 +640,8 @@
     #hero { padding: 0 2rem; }
     .hero-stats { right: 2rem; bottom: 6rem; gap: 1.5rem; }
     .scroll-hint { display: none; }
-    #about, #experience, #projects, #github-section, #portfolio-upload, #contact { padding: 5rem 2rem; }
-    .about-grid, .contact-grid, .upload-grid { grid-template-columns: 1fr; gap: 3rem; }
+    #about, #experience, #projects, #github-section, #contact { padding: 5rem 2rem; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
     .about-img-wrap { max-width: 260px; }
     .github-repos-grid { grid-template-columns: 1fr; }
     footer { padding: 1.5rem 2rem; flex-direction: column; gap: 1rem; text-align: center; }
@@ -726,7 +693,7 @@
     <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#github-section">GitHub</a></li>
-    <li><a href="#portfolio-upload">Portfolio</a></li>
+
     <li><a href="#contact">Contact</a></li>
   </ul>
   <a href="#contact" class="nav-cta">Hire Me</a>
@@ -750,8 +717,10 @@
     <span class="line"><span class="italic-word">Yu</span></span>
   </h1>
   <p class="hero-desc">
-    CS Student · Builder of things that matter.
-    I create clean, performant systems and thoughtful user experiences.
+    CS Student · Aspiring Cyber Security Engineer.<br> 
+    if (user experience == great) { <br>
+      return A great first impression. <br>
+    }
   </p>
   <div class="hero-actions">
     <div class="magnetic-wrap"><a href="#projects" class="btn-primary glow-pulse">View My Work</a></div>
@@ -769,7 +738,7 @@
       <div class="stat-label">GPA</div>
     </div>
     <div class="stat">
-      <div class="stat-num"><span class="counter" data-target="2">0</span></div>
+      <div class="stat-num"><span class="counter" data-target="4">0</span></div>
       <div class="stat-label">Internships</div>
     </div>
   </div>
@@ -788,31 +757,26 @@
     <div class="about-text">
       <div class="section-header">
         <div class="section-tag reveal">About Me</div>
-        <h2 class="section-title reveal reveal-delay-1">I build software<br>that <span class="shimmer-text">scales.</span></h2>
+        <h2 class="section-title reveal reveal-delay-1">My code is<br>  <span class="shimmer-text">multilingual.</span></h2>
       </div>
       <p class="reveal reveal-delay-2">
-        I'm a Computer Science graduate passionate about <strong>distributed systems</strong>, <strong>machine learning</strong>, and <strong>full-stack development</strong>. I love transforming complex problems into elegant, efficient solutions.
+        I'm a Computer Science graduate passionate about <strong>cybersecurity</strong>, <strong>AI/ML</strong>, and <strong>cloud systems</strong>. I love transforming complex problems into elegant, efficient solutions.
       </p>
       <p class="reveal reveal-delay-3">
-        My academic journey included coursework in <strong>algorithms</strong>, <strong>operating systems</strong>, <strong>computer architecture</strong>, and <strong>AI/ML</strong>. Outside class, I've built everything from mobile apps to CLI tools that real users rely on.
+        I'm a proactive learner who thrives in dynamic environments. My goal is to solve real-world challenges by leveraging my technical skills and continuously grow professionally.
       </p>
       <div class="skills-grid reveal">
         <span class="skill-chip">Python</span>
-        <span class="skill-chip">TypeScript</span>
-        <span class="skill-chip">React</span>
-        <span class="skill-chip">Node.js</span>
-        <span class="skill-chip">Go</span>
-        <span class="skill-chip">PostgreSQL</span>
+        <span class="skill-chip">Bash/Shell</span>
+        <span class="skill-chip">C/C++</span>
+        <span class="skill-chip">Java</span>
+        <span class="skill-chip">Git</span>
         <span class="skill-chip">Docker</span>
-        <span class="skill-chip">Kubernetes</span>
         <span class="skill-chip">AWS</span>
         <span class="skill-chip">GraphQL</span>
-        <span class="skill-chip">Redis</span>
-        <span class="skill-chip">TensorFlow</span>
-        <span class="skill-chip">C/C++</span>
-        <span class="skill-chip">Git</span>
+        <span class="skill-chip">Racket</span>
         <span class="skill-chip">Linux</span>
-        <span class="skill-chip">Rust</span>
+        <span class="skill-chip">Ruby</span>
       </div>
     </div>
   </div>
@@ -829,24 +793,24 @@
   <div class="timeline">
     <div class="timeline-item">
       <div class="timeline-dot"></div>
-      <div class="timeline-date">2023 – 2024</div>
-      <div class="timeline-role">Software Engineering Intern</div>
-      <div class="timeline-company">Tech Company Name · San Francisco, CA</div>
-      <div class="timeline-desc">Developed and deployed microservices handling 50k+ daily requests. Improved API response times by 40% through query optimization and caching strategies. Collaborated in an agile team of 8 engineers.</div>
+      <div class="timeline-date">2026 - present </div>
+      <div class="timeline-role">IT Help Desk Technician</div>
+      <div class="timeline-company">Varsteel · Lethbridge, Alberta</div>
+      <div class="timeline-desc">Oversaw IT infrastructure for a steel manufacturing company, maintaining network security and hardware integrity. Supported cross-departmental projects, ensuring seamless technology integration and operational continuity.</div>
     </div>
     <div class="timeline-item">
       <div class="timeline-dot"></div>
-      <div class="timeline-date">2022 – 2023</div>
-      <div class="timeline-role">Research Assistant</div>
-      <div class="timeline-company">University CS Department · Research Lab</div>
-      <div class="timeline-desc">Contributed to NLP research on transformer architectures. Co-authored a paper on efficient attention mechanisms. Built a data pipeline processing 2TB of text data.</div>
+      <div class="timeline-date">Summer 2022 / 2023 / 2024</div>
+      <div class="timeline-role">IT Support</div>
+      <div class="timeline-company">Summit, an Earth Services Company · Calgary, Alberta</div>
+      <div class="timeline-desc">Experienced IT professional with a strong foundation in end-user support, hardware repair, and server infrastructure management. Demonstrated success in strengthening cybersecurity and data integrity through Microsoft Azure Cloud deployments and cross-functional collaboration. Proven ability to optimize daily workflows and team productivity by leading automation initiatives and developing tailored programming solutions.</div>
     </div>
     <div class="timeline-item">
       <div class="timeline-dot"></div>
-      <div class="timeline-date">2020 – 2024</div>
+      <div class="timeline-date">2021 – present</div>
       <div class="timeline-role">BSc Computer Science</div>
-      <div class="timeline-company">Your University · Graduated with Honours</div>
-      <div class="timeline-desc">Specialization in AI & Distributed Systems. Dean's List all four years. Led the university's competitive programming club. Capstone project: real-time collaborative code editor.</div>
+      <div class="timeline-company">University of Lethbridge · Graduated with COOP</div>
+      <div class="timeline-desc">Gained a liberal education with a focus in computer science, including software engineering, algorithms, data structures, and artificial intelligence.</div>
     </div>
   </div>
 </section>
@@ -943,10 +907,10 @@
       <span class="gh-dot gh-red"></span>
       <span class="gh-dot gh-yellow"></span>
       <span class="gh-dot gh-green"></span>
-      <span class="github-url">github.com / your-username</span>
+      <span class="github-url">github.com/seabastien</span>
     </div>
     <div class="github-username-form">
-      <input type="text" id="github-username" placeholder="Enter GitHub username (e.g. torvalds)" value="">
+      <input type="text" id="github-username" placeholder="seabastien" value="seabastien">
       <button class="github-load-btn" onclick="loadGithubRepos()">Load Repos</button>
     </div>
     <div id="github-repos-container">
@@ -958,47 +922,12 @@
   </div>
 </section>
 
-<div class="section-divider"></div>
-
-<!-- PORTFOLIO UPLOAD -->
-<section id="portfolio-upload" class="parallax-section">
-  <div class="section-header reveal">
-    <div class="section-tag">Portfolio</div>
-    <h2 class="section-title">Upload Your<br><span style="color:var(--accent)">Work</span></h2>
-  </div>
-  <div class="upload-grid">
-    <div>
-      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
-        <input type="file" id="file-input" multiple accept=".pdf,.docx,.pptx,.zip,.png,.jpg,.jpeg,.mp4,.gif" onchange="handleFiles(this.files)">
-        <span class="upload-icon">⬆</span>
-        <div class="upload-label">Drop files here or click to upload</div>
-        <div class="upload-hint">Add your portfolio pieces, case studies, or project files</div>
-        <div class="upload-formats">
-          <span class="format-badge">PDF</span>
-          <span class="format-badge">DOCX</span>
-          <span class="format-badge">PPTX</span>
-          <span class="format-badge">ZIP</span>
-          <span class="format-badge">PNG/JPG</span>
-          <span class="format-badge">MP4</span>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="upload-section-title">
-        Uploaded Files
-        <span class="uploaded-count" id="file-count"></span>
-      </div>
-      <ul class="uploaded-files" id="uploaded-files-list">
-        <li class="empty-files" id="empty-files-msg">No files uploaded yet.<br>Add your portfolio pieces above.</li>
-      </ul>
-    </div>
-  </div>
-</section>
 
 <div class="section-divider"></div>
 
 <!-- CONTACT -->
 <section id="contact" class="parallax-section">
+  <canvas id="contact-particles"></canvas>
   <div class="contact-grid">
     <div>
       <div class="section-tag reveal">Contact</div>
@@ -1009,17 +938,17 @@
         I'm currently open to full-time roles and freelance projects. Whether you have an exciting opportunity or just want to chat about tech — my inbox is always open.
       </p>
       <div class="contact-links reveal">
-        <a href="mailto:your@email.com" class="contact-link">
+        <a href="mailto:sabastienyu@gmail.com" class="contact-link">
           <span class="contact-link-icon">✉</span>
-          your@email.com
+          sabastienyu@gmail.com
         </a>
-        <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-link">
+        <a href="https://linkedin.com/in/SabastienYu" target="_blank" class="contact-link">
           <span class="contact-link-icon">in</span>
-          linkedin.com/in/yourprofile
+          linkedin.com/in/SabastienYu
         </a>
-        <a href="https://github.com/yourusername" target="_blank" class="contact-link">
+        <a href="https://github.com/seabastien" target="_blank" class="contact-link">
           <span class="contact-link-icon">⌥</span>
-          github.com/yourusername
+          github.com/seabastien
         </a>
         <a href="#" class="contact-link">
           <span class="contact-link-icon">↓</span>
@@ -1031,7 +960,7 @@
       <form class="contact-form" onsubmit="submitForm(event)">
         <div class="form-group">
           <label class="form-label">Name</label>
-          <input type="text" class="form-input" placeholder="Your name" required>
+          <input type="text" class="form-input" placeholder="Your Name" required>
         </div>
         <div class="form-group">
           <label class="form-label">Email</label>
@@ -1053,7 +982,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-copy">© 2024 Your Name. Built with care.</div>
+  <div class="footer-copy">© 2024 Sabastien Yu. Built with care.</div>
   <div class="footer-socials">
     <a href="#" class="footer-social">GitHub</a>
     <a href="#" class="footer-social">LinkedIn</a>
@@ -1304,7 +1233,16 @@ window.addEventListener('scroll', () => {
 // =============================================
 const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .timeline-item');
 const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    } else {
+      // Don't reverse elements that have their own interactive hover transforms
+      if (!e.target.classList.contains('project-card')) {
+        e.target.classList.remove('visible');
+      }
+    }
+  });
 }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 revealEls.forEach(el => io.observe(el));
 
@@ -1399,8 +1337,8 @@ async function loadGithubRepos() {
     const repos = await resp.json();
     if (!repos.length) { container.innerHTML = '<div class="github-placeholder">No public repositories found.</div>'; return; }
     document.querySelector('.github-url').textContent = `github.com / ${username}`;
-    container.innerHTML = `<div class="github-repos-grid">${repos.map(r => `
-      <a href="${r.html_url}" target="_blank" class="repo-card" style="text-decoration:none">
+    container.innerHTML = `<div class="github-repos-grid">${repos.map((r, i) => `
+      <a href="${r.html_url}" target="_blank" class="repo-card" style="text-decoration:none; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.1}s forwards;">
         <div class="repo-name">${r.name}</div>
         <div class="repo-desc">${r.description || 'No description provided.'}</div>
         <div class="repo-meta">
@@ -1416,56 +1354,6 @@ async function loadGithubRepos() {
 }
 document.getElementById('github-username').addEventListener('keydown', e => { if (e.key === 'Enter') loadGithubRepos(); });
 
-// =============================================
-// FILE UPLOAD
-// =============================================
-const uploadedFiles = [];
-function handleFiles(files) {
-  Array.from(files).forEach(file => {
-    if (!uploadedFiles.find(f => f.name === file.name && f.size === file.size)) {
-      uploadedFiles.push(file);
-    }
-  });
-  renderFileList();
-  showToast(`${files.length} file${files.length > 1 ? 's' : ''} added`);
-}
-function renderFileList() {
-  const list = document.getElementById('uploaded-files-list');
-  const empty = document.getElementById('empty-files-msg');
-  const count = document.getElementById('file-count');
-  count.textContent = uploadedFiles.length ? `(${uploadedFiles.length})` : '';
-  if (!uploadedFiles.length) {
-    list.innerHTML = '<li class="empty-files" id="empty-files-msg">No files uploaded yet.<br>Add your portfolio pieces above.</li>';
-    return;
-  }
-  list.innerHTML = uploadedFiles.map((f, i) => `
-    <li class="uploaded-file">
-      <span class="file-icon">${getFileIcon(f.name)}</span>
-      <span class="file-name">${f.name}</span>
-      <span class="file-size">${formatSize(f.size)}</span>
-      <button class="file-remove" onclick="removeFile(${i})">✕</button>
-    </li>`).join('');
-}
-function removeFile(idx) {
-  uploadedFiles.splice(idx, 1);
-  renderFileList();
-}
-function getFileIcon(name) {
-  const ext = name.split('.').pop().toLowerCase();
-  const icons = { pdf: '📄', docx: '📝', doc: '📝', pptx: '📊', ppt: '📊', zip: '📦', rar: '📦', png: '🖼', jpg: '🖼', jpeg: '🖼', gif: '🎞', mp4: '🎬', mov: '🎬' };
-  return icons[ext] || '📁';
-}
-function formatSize(bytes) {
-  if (bytes < 1024) return bytes + ' B';
-  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-}
-
-// Drag & drop
-const zone = document.getElementById('upload-zone');
-zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
 
 // =============================================
 // FORM
@@ -1502,19 +1390,88 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 // =============================================
-// TILT EFFECT ON PROJECT CARDS
+// SUBTLE GLOW FOLLOW ON PROJECT CARDS
 // =============================================
 document.querySelectorAll('.project-card').forEach(card => {
   card.addEventListener('mousemove', e => {
     const rect = card.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    card.style.transform = `translateY(-6px) perspective(600px) rotateX(${-y * 5}deg) rotateY(${x * 5}deg)`;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(110,231,183,0.06), var(--surface) 60%)`;
   });
   card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
+    card.style.background = '';
   });
 });
+
+// =============================================
+// CONTACT SECTION PARTICLES
+// =============================================
+(function() {
+  const cCanvas = document.getElementById('contact-particles');
+  const cCtx = cCanvas.getContext('2d');
+  let cParticles = [];
+
+  function resizeContactCanvas() {
+    const section = document.getElementById('contact');
+    cCanvas.width = section.offsetWidth;
+    cCanvas.height = section.offsetHeight;
+  }
+  resizeContactCanvas();
+  window.addEventListener('resize', resizeContactCanvas);
+
+  class CParticle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * cCanvas.width;
+      this.y = Math.random() * cCanvas.height;
+      this.size = Math.random() * 1.5 + 0.3;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.4 + 0.1;
+      this.hue = Math.random() > 0.5 ? 157 : 231;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.x < 0 || this.x > cCanvas.width || this.y < 0 || this.y > cCanvas.height) this.reset();
+    }
+    draw() {
+      cCtx.beginPath();
+      cCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      cCtx.fillStyle = this.hue === 157
+        ? `rgba(110,231,183,${this.opacity})`
+        : `rgba(129,140,248,${this.opacity})`;
+      cCtx.fill();
+    }
+  }
+  for (let i = 0; i < 40; i++) cParticles.push(new CParticle());
+
+  function drawContactLines() {
+    for (let i = 0; i < cParticles.length; i++) {
+      for (let j = i + 1; j < cParticles.length; j++) {
+        const dx = cParticles[i].x - cParticles[j].x;
+        const dy = cParticles[i].y - cParticles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          cCtx.beginPath();
+          cCtx.moveTo(cParticles[i].x, cParticles[i].y);
+          cCtx.lineTo(cParticles[j].x, cParticles[j].y);
+          cCtx.strokeStyle = `rgba(110,231,183,${0.06 * (1 - dist / 120)})`;
+          cCtx.lineWidth = 0.5;
+          cCtx.stroke();
+        }
+      }
+    }
+  }
+  function animateContactParticles() {
+    cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+    cParticles.forEach(p => { p.update(); p.draw(); });
+    drawContactLines();
+    requestAnimationFrame(animateContactParticles);
+  }
+  animateContactParticles();
+})();
 </script>
 </body>
 </html>
