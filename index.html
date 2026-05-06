@@ -23,7 +23,12 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  html { 
+    scroll-behavior: smooth; 
+    scroll-padding-top: 80px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface2) var(--bg);
+  }
 
   body {
     background: var(--bg);
@@ -33,6 +38,22 @@
     line-height: 1.7;
     overflow-x: hidden;
     cursor: none;
+  }
+
+  /* CUSTOM SCROLLBAR */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--surface2);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
   }
 
   /* PARTICLE CANVAS */
@@ -982,13 +1003,15 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-copy">© 2024 Sabastien Yu. Built with care.</div>
+  <div class="footer-copy">© 2026 Sabastien Yu. Built with care.</div>
+<!--
   <div class="footer-socials">
-    <a href="#" class="footer-social">GitHub</a>
-    <a href="#" class="footer-social">LinkedIn</a>
+    <a href="https://github.com/seabastien" class="footer-social">GitHub</a>
+    <a href="https://linkedin.com/in/SabastienYu" class="footer-social">LinkedIn</a>
     <a href="#" class="footer-social">Twitter</a>
     <a href="#" class="footer-social">Resume ↓</a>
   </div>
+  -->
 </footer>
 
 <!-- MODAL -->
@@ -1471,6 +1494,65 @@ document.querySelectorAll('.project-card').forEach(card => {
     requestAnimationFrame(animateContactParticles);
   }
   animateContactParticles();
+})();
+
+// =============================================
+// SMOOTH SCROLLING (MOUSE ONLY)
+// =============================================
+(function() {
+  // Only apply on devices with a fine pointer (mouse/trackpad), not mobile touch devices
+  if (!window.matchMedia("(pointer: fine)").matches) return;
+
+  const html = document.documentElement;
+  let currentY = window.scrollY;
+  let targetY = window.scrollY;
+  let ease = 0.08;
+  let isScrolling = false;
+
+  window.addEventListener('wheel', (e) => {
+    // Only intercept vertical scrolling if no modifier keys are pressed (allow zoom)
+    if (e.ctrlKey || e.metaKey) return; 
+    
+    // Don't override modal scrolling or if body is locked
+    if (document.body.style.overflow === 'hidden') return;
+
+    // Check if user is scrolling inside a scrollable element (like a modal)
+    const isScrollable = e.target.closest && e.target.closest('.modal');
+    if (isScrollable) return;
+
+    e.preventDefault();
+    targetY += e.deltaY;
+    // Clamp target to document bounds
+    targetY = Math.max(0, Math.min(targetY, document.body.scrollHeight - window.innerHeight));
+    
+    if (!isScrolling) {
+      isScrolling = true;
+      html.style.scrollBehavior = 'auto'; // Temporarily disable native CSS smooth scroll
+      requestAnimationFrame(smoothScroll);
+    }
+  }, { passive: false });
+
+  function smoothScroll() {
+    currentY += (targetY - currentY) * ease;
+    
+    if (Math.abs(targetY - currentY) > 0.5) {
+      window.scrollTo(0, currentY);
+      requestAnimationFrame(smoothScroll);
+    } else {
+      window.scrollTo(0, targetY);
+      currentY = targetY;
+      isScrolling = false;
+      html.style.scrollBehavior = ''; // Restore native CSS smooth scroll for anchor links
+    }
+  }
+
+  // Handle external scroll events (e.g., keyboard, scrollbar drag, anchor clicks)
+  window.addEventListener('scroll', () => {
+    if (!isScrolling) {
+      currentY = window.scrollY;
+      targetY = window.scrollY;
+    }
+  }, { passive: true });
 })();
 </script>
 </body>
