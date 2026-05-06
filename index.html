@@ -1016,24 +1016,24 @@
       </div>
     </div>
     <div class="reveal">
-      <form class="contact-form" onsubmit="submitForm(event)">
+      <form class="contact-form" id="contact-form" onsubmit="submitForm(event)">
         <div class="form-group">
           <label class="form-label">Name</label>
-          <input type="text" class="form-input" placeholder="Your Name" required>
+          <input type="text" name="name" class="form-input" placeholder="Your Name" required>
         </div>
         <div class="form-group">
           <label class="form-label">Email</label>
-          <input type="email" class="form-input" placeholder="your@email.com" required>
+          <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
         </div>
         <div class="form-group">
           <label class="form-label">Subject</label>
-          <input type="text" class="form-input" placeholder="What's this about?">
+          <input type="text" name="subject" class="form-input" placeholder="What's this about?">
         </div>
         <div class="form-group">
           <label class="form-label">Message</label>
-          <textarea class="form-textarea" placeholder="Tell me about your project or opportunity..." required></textarea>
+          <textarea name="message" class="form-textarea" placeholder="Tell me about your project or opportunity..." required></textarea>
         </div>
-        <button type="submit" class="form-submit">Send Message →</button>
+        <button type="submit" class="form-submit" id="contact-submit-btn">Send Message →</button>
       </form>
     </div>
   </div>
@@ -1462,10 +1462,45 @@ document.getElementById('github-username').addEventListener('keydown', e => { if
 // =============================================
 // FORM
 // =============================================
-function submitForm(e) {
+async function submitForm(e) {
   e.preventDefault();
-  showToast('Message sent! I\'ll be in touch soon.');
-  e.target.reset();
+  
+  const form = e.target;
+  const submitBtn = document.getElementById('contact-submit-btn');
+  const originalText = submitBtn.innerHTML;
+  
+  // Create JSON payload from FormData
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  // Show loading state
+  submitBtn.innerHTML = '<span style="animation:pulse 1s infinite alternate">Sending...</span>';
+  submitBtn.style.pointerEvents = 'none';
+  
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Something went wrong');
+    }
+
+    // Success
+    showToast('Message safely delivered to MongoDB! I\'ll be in touch.');
+    form.reset();
+  } catch (err) {
+    console.error(err);
+    showToast('⚠ Error: ' + err.message);
+  } finally {
+    // Restore button
+    submitBtn.innerHTML = originalText;
+    submitBtn.style.pointerEvents = 'auto';
+  }
 }
 
 // =============================================
